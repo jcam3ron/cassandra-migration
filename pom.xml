@@ -2,9 +2,10 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.builtamont</groupId>
-    <artifactId>cassandra-migration</artifactId>
-    <name>Cassandra Migration</name>
+    <artifactId>cassandra-migration-parent</artifactId>
     <version>0.10-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Cassandra Migration</name>
     <description>
         Database migration tool for Cassandra
     </description>
@@ -17,23 +18,10 @@
         </license>
     </licenses>
 
-    <packaging>jar</packaging>
-
     <organization>
         <name>Builtamont Tech International</name>
         <url>builtamonttech.com</url>
     </organization>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <scm>
         <url>https://github.com/builtamont-oss/cassandra-migration</url>
@@ -53,147 +41,186 @@
     <prerequisites>
         <maven>3.0.0</maven>
     </prerequisites>
-    
+
+    <modules>
+        <module>cassandra-migration-core</module>
+        <module>cassandra-migration-maven-plugin</module>
+    </modules>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <kotlin.version>1.0.3</kotlin.version>
         <slf4j.version>1.7.13</slf4j.version>
+        <cassandra-driver.version>3.0.0</cassandra-driver.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.version>2.2.1</maven.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.2</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-core</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-junit</artifactId>
-            <version>2.0.0.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.cassandraunit</groupId>
-            <artifactId>cassandra-unit</artifactId>
-            <version>3.0.0.1</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>logback-core</artifactId>
-                    <groupId>ch.qos.logback</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>logback-classic</artifactId>
-                    <groupId>ch.qos.logback</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.2</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>com.datastax.cassandra</groupId>
+                <artifactId>cassandra-driver-core</artifactId>
+                <version>${cassandra-driver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>${maven.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-artifact</artifactId>
+                <version>${maven.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-project</artifactId>
+                <version>${maven.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-model</artifactId>
+                <version>${maven.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-core</artifactId>
+                <version>${maven.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>1.10.19</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-junit</artifactId>
+                <version>2.0.0.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.cassandraunit</groupId>
+                <artifactId>cassandra-unit</artifactId>
+                <version>3.0.0.1</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>logback-core</artifactId>
+                        <groupId>ch.qos.logback</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>logback-classic</artifactId>
+                        <groupId>ch.qos.logback</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <includes>
-                    <include>version.txt</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>kotlin-maven-plugin</artifactId>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <version>${kotlin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.19.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
-            <plugin>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <version>${kotlin.version}</version>
-
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>process-sources</phase>
-                        <goals> <goal>compile</goal> </goals>
-                    </execution>
-
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>process-test-sources</phase>
-                        <goals> <goal>test-compile</goal> </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.builtamont.cassandra.migration.CommandLine</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
                 <!-- NOTE: Configuration as per http://stackoverflow.com/a/33757854 -->
                 <configuration>
                     <forkCount>1</forkCount>
@@ -219,7 +246,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.4</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -232,7 +258,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -245,7 +270,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -259,7 +283,6 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.5</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -270,7 +293,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
-                        <version>2.5.2</version>
                         <configuration>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
                             <useReleaseProfile>false</useReleaseProfile>

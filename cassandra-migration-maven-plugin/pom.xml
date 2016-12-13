@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd http://www.w3.org/2001/XMLSchema-instance ">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.builtamont</groupId>
+        <artifactId>cassandra-migration-parent</artifactId>
+        <version>0.10-SNAPSHOT</version>
+    </parent>
+    <artifactId>cassandra-migration-maven-plugin</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Cassandra Migration Maven Plugin</name>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.sonatype.plexus</groupId>
+            <artifactId>plexus-sec-dispatcher</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>1.5.15</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cassandra-migration-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>version.txt</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-license</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>..</directory>
+                                    <includes>
+                                        <include>LICENSE.txt</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <version>${kotlin.version}</version>
+
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>process-sources</phase>
+                        <goals> <goal>compile</goal> </goals>
+                    </execution>
+
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>process-test-sources</phase>
+                        <goals> <goal>test-compile</goal> </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
